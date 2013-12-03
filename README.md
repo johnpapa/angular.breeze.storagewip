@@ -1,4 +1,4 @@
-ng-z-storage
+angular.breeze.storage
 ============
 
 Local Storage Library customized for Angular and Breeze 
