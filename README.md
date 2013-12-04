@@ -1,4 +1,3 @@
-angular.breeze.wip
+angular.breeze.storagewip
 ============
 
-Local Storage Library customized for Angular and Breeze 
