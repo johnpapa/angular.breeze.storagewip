@@ -43,8 +43,10 @@ Version 1.0.0
     // Clear all WIP from local storage
     storageWip.clearAllWip()
 
-    // Store 1 entity in local storage
-    var key = storageWip.storeWipEntity(entity)
+    // Store 1 entity in local storage. Pass in the wip key, entityName, and a description.
+    // routeState is the name of the route (after the hash) for the view where this entity may be viewed.
+    // routeState defaults to entityName.toLowercase() 
+    var key = storageWip.storeWipEntity(entity, key, entityName, description, routeState)
 
     // Remove 1 entity from local storage, by its WIP key
     storageWip.removeWipEntity(key)
