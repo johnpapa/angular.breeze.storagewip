@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
     <metadata>
         <id>Angular.Breeze.StorageWIP</id>
-        <version>1.0.0-beta</version>
+        <version>1.0.0-beta4</version>
         <title>Angular Breeze Storage WIP</title>
         <authors>John Papa</authors>
         <owners>John Papa</owners>
@@ -22,7 +22,7 @@ Works great with HotTowel.Angular</description>
         </dependencies>
     </metadata>
     <files>
-        <file src="NuGet\scripts\ngz.storage.js" target="scripts\ngz.storage.js" />
-        <file src="NuGet\install.ps1" target="tools\install.ps1" />
+        <file src="NuGet\scripts\angular.breeze.storagewip.js" target="content\scripts\angular.breeze.storagewip.js" />
+        <file src="tools\install.ps1" target="tools\install.ps1" />
     </files>
 </package>

@@ -12,7 +12,7 @@ try
   {
     # user is installing from VS NuGet console
     # get reference to the window, the console host and the input history
-    # show webpage if "install-package angular.breeze.WIP" was last input
+    # show webpage if "install-package angular.breeze.storagewip" was last input
 
     $consoleWindow = $(Get-VSComponentModel).GetService([NuGetConsole.IPowerConsoleWindow])
 
@@ -32,7 +32,7 @@ try
     if ($lastCommand)
     {
       $lastCommand = $lastCommand.Trim().ToLower()
-      if ($lastCommand.StartsWith("install-package") -and $lastCommand.Contains("angular.breeze.WIP"))
+      if ($lastCommand.StartsWith("install-package") -and $lastCommand.Contains("angular.breeze.storagewip"))
       {
         $dte2.ItemOperations.Navigate($url) | Out-Null
       }
@@ -42,7 +42,7 @@ try
   {
     # user is installing from VS NuGet dialog
     # get reference to the window, then smart output console provider
-    # show webpage if messages in buffered console contains "installing...angular.breezze.WIP" in last operation
+    # show webpage if messages in buffered console contains "installing...angular.breeze.storagewip" in last operation
 
     $instanceField = [NuGet.Dialog.PackageManagerWindow].GetField("CurrentInstance", [System.Reflection.BindingFlags]::Static -bor `
       [System.Reflection.BindingFlags]::NonPublic)
@@ -75,7 +75,7 @@ try
 
       $lines = $lastOperation -split "`r`n"
 
-      $installMatch = $lines | ? { $_.StartsWith("------- installing...angular.breeze.WIP ") } | select -first 1
+      $installMatch = $lines | ? { $_.StartsWith("------- installing...angular.breeze.storagewip ") } | select -first 1
 
       if ($installMatch)
       {

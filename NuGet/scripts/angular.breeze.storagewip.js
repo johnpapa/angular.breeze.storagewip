@@ -18,7 +18,7 @@
 (function () {
     'use strict';
 
-    var storageModule = angular.module('ngzWip.storage');
+    var storageModule = angular.module('ngzWip', []);
 
     /*
      * storageModule provider
@@ -37,10 +37,9 @@
                 wipChanged: 'wip.changed'
             },
             // storageWip
-            wipEnabled: true,
             wipKey: '',
-            appErrorPrefix: '',
-            newGuid: function() { },
+            appErrorPrefix: '[ngzWip] ',
+            newGuid: breeze.core.getUuid,
             // storageCore
             version: ''
         };
@@ -160,7 +159,7 @@
             return false;
         }
 
-        function save () { //msg) {
+        function save () {
             if (enabled) {
                 var exportData = manager.exportEntities();
                 saveToLocalStorage(storageKey, exportData);
@@ -189,13 +188,12 @@
      * API's for saving, loading, finding and clearing breeze
      * breeze work in progress (WIP) from local storage
      */
-    storageWip.factory('storageWip',
+    storageModule.factory('storageWip',
         ['$q', '$rootScope', '$window', 'storageConfig', 'storageCore', storageWip]);
 
     function storageWip($q, $rootScope, $window, storageConfig, storageCore) {
         var storeConfig = storageConfig.config;
         var manager;
-        var wipEnabled = storeConfig.wipEnabled;
         var wipKey = storeConfig.wipKey;
 
         var service = {
@@ -239,11 +237,8 @@
             return wip;
         }
 
-        function loadWipEntity (wipEntityKey) {
-            if (wipEnabled) {
-                return importWipData(wipEntityKey);
-            }
-            return null;
+        function loadWipEntity (key) {
+            return importWipData(key);
         }
 
         function removeWipEntity (key) {
@@ -272,15 +267,13 @@
             if (!description) { throw new Error(prefix + 'Must pass description to storeWipEntity'); }
             if (!routeState) { routeState = entityName.toLowerCase(); }
 
-            if (wipEnabled) {
-                var entityState = entity.entityAspect.entityState;
-                var theseAreTheDroidsYoureLookingFor = entityState.isAdded() || entityState.isModified();
-                if (!theseAreTheDroidsYoureLookingFor) { return key; }
-                if (!key) { key = storeConfig.newGuid(); }
-                var exportData = manager.exportEntities([entity], false);
-                saveToWipLocalStorage(key, exportData);
-                storeWipSummary(entity, key, entityName, description, routeState);
-            }
+            var entityState = entity.entityAspect.entityState;
+            var theseAreTheDroidsYoureLookingFor = entityState.isAdded() || entityState.isModified();
+            if (!theseAreTheDroidsYoureLookingFor) { return key; }
+            if (!key) { key = storeConfig.newGuid(); }
+            var exportData = manager.exportEntities([entity], false);
+            saveToWipLocalStorage(key, exportData);
+            storeWipSummary(entity, key, entityName, description, routeState);
             return key;
         }
 
