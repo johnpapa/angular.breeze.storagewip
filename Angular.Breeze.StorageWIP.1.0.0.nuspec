@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+    <metadata>
+        <id>Angular.Breeze.StorageWIP</id>
+        <version>1.0.0</version>
+        <title>Angular Breeze Storage WIP</title>
+        <authors>John Papa</authors>
+        <owners>John Papa</owners>
+        <licenseUrl>http://www.opensource.org/licenses/mit-license.php</licenseUrl>
+        <projectUrl>https://github.com/johnpapa/angular.breeze.storagewip</projectUrl>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>Angular.Breeze.StorageWIP provides an API to export all client data from Breeze to local storage, and import it back into Breeze retaning all metadata, state and object relations. It also supports an API for saving Work in Progress (WIP) to local storage.
+Works great with HotTowel.Angular</description>
+        <summary>Save your Work in Progress (WIP) to local storage in a SPA built with Angular and Breeze.</summary>
+        <releaseNotes />
+        <copyright>Copyright © 2013 John Papa</copyright>
+        <language>en-US</language>
+        <tags>spa angular javascript hottowel breeze localstorage wip</tags>
+        <dependencies>
+            <dependency id="AngularJS.Core" version="1.2.3" />
+            <dependency id="Breeze.Client" version="1.4.6" />
+        </dependencies>
+    </metadata>
+    <files>
+        <file src="content\scripts\angular.breeze.storagewip.js" target="content\scripts\angular.breeze.storagewip.js" />
+        <file src="tools\install.ps1" target="tools\install.ps1" />
+    </files>
+</package>
