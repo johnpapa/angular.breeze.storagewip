@@ -9,10 +9,10 @@
  * Dependencies: HTML5 localStorage, Breeze and Angular.
  *
  * Description:
- * Defines the ngzWip.storage module, and provides the base 
- * features for the services storage and storageWip 
+ * Defines the ngzWip module, and provides the base 
+ * features for the services zStorage and zStorageWip 
  * 
- * Must setup the storageConfigProvider first, with all of 
+ * Must setup the zStorageConfigProvider first, with all of 
  * the storage settings.
  */
 (function () {
@@ -25,10 +25,9 @@
      * 
      * Configure the Storage and WIP features.
      */
-    storageModule.provider('storageConfig', function () {
+    storageModule.provider('zStorageConfig', function () {
         this.config = {
-            // These are the properties we need to set
-            // storage
+            // These are the properties we need to set storage
             enabled: false,
             key: '',
             events: {
@@ -36,11 +35,9 @@
                 storeChanged: 'store.changed',
                 wipChanged: 'wip.changed'
             },
-            // storageWip
             wipKey: '',
             appErrorPrefix: '[ngzWip] ',
             newGuid: breeze.core.getUuid,
-            // storageCore
             version: ''
         };
 
@@ -52,14 +49,14 @@
     });
 
     /*
-     * storageCore service
+     * zStorageCore service
      * 
-     * For internal use by storage and storageWip services
+     * For internal use by storage and zStorageWip services
      */
-    storageModule.factory('storageCore', ['$rootScope', 'storageConfig', storageCore]);
+    storageModule.factory('zStorageCore', ['$rootScope', 'zStorageConfig', zStorageCore]);
 
-    function storageCore($rootScope, storageConfig) {
-        var storeConfig = storageConfig.config;
+    function zStorageCore($rootScope, zStorageConfig) {
+        var storeConfig = zStorageConfig.config;
         var storeMeta = {
             breezeVersion: breeze.version,
             appVersion: storeConfig.version,
@@ -75,11 +72,11 @@
             formatStorageData: formatStorageData,
             storeMeta: storeMeta
         };
-        
+
         return service;
 
-        function _broadcast(messageName, activity, wip){
-            return $rootScope.$broadcast(messageName, {activity: activity, wip: wip || [] });
+        function _broadcast(messageName, activity, wip) {
+            return $rootScope.$broadcast(messageName, { activity: activity, wip: wip || [] });
         }
 
         function checkStoreImportVersionAndParseData(importedData) {
@@ -97,12 +94,12 @@
                     }
                     return data[1];
                 } else {
-                    broadcast(storageConfig.events.error, 
-                        'Did not load from storage because mismatched versions', 
-                        {current: storeMeta, storage: importMeta });
+                    broadcast(zStorageConfig.events.error,
+                        'Did not load from storage because mismatched versions',
+                        { current: storeMeta, storage: importMeta });
                 }
             } catch (ex) {
-                broadcast(storageConfig.events.error, 'Exception during load from storage: ' + ex.message, ex);
+                broadcast(zStorageConfig.events.error, 'Exception during load from storage: ' + ex.message, ex);
             }
             return null; // failed
         }
@@ -118,11 +115,11 @@
      * API's for saving, loading, and clearing breeze
      * entity manager from local storage
      */
-    storageModule.factory('storage',
-        ['$rootScope', '$window', 'storageConfig', 'storageCore', storage]);
+    storageModule.factory('zStorage',
+        ['$rootScope', '$window', 'zStorageConfig', 'zStorageCore', zStorage]);
 
-    function storage($rootScope, $window, storageConfig, storageCore) {
-        var storeConfig = storageConfig.config;
+    function zStorage($rootScope, $window, zStorageConfig, zStorageCore) {
+        var storeConfig = zStorageConfig.config;
         var manager;
         var storageKey = storeConfig.key;
         var enabled = storeConfig.enabled;
@@ -136,63 +133,63 @@
         };
 
         return service;
-        
-        function init (mgr) { manager = mgr; }
-        
+
+        function init(mgr) { manager = mgr; }
+
         function areItemsLoaded(key, value) {
             if (value === undefined) {
-                return storageCore.storeMeta.isLoaded[key]; // get
+                return zStorageCore.storeMeta.isLoaded[key]; // get
             }
-            return storageCore.storeMeta.isLoaded[key] = value; // set
+            return zStorageCore.storeMeta.isLoaded[key] = value; // set
         }
 
-        function clear () {
+        function clear() {
             $window.localStorage.clear();
-            storageCore._broadcast(storeConfig.events.wipChanged, 'cleared all WIP');
-            storageCore._broadcast(storeConfig.events.storeChanged, 'cleared');
+            zStorageCore._broadcast(storeConfig.events.wipChanged, 'cleared all WIP');
+            zStorageCore._broadcast(storeConfig.events.storeChanged, 'cleared');
         }
 
-        function load () {
+        function load() {
             if (enabled) {
                 return importData();
             }
             return false;
         }
 
-        function save () {
+        function save() {
             if (enabled) {
                 var exportData = manager.exportEntities();
                 saveToLocalStorage(storageKey, exportData);
-                storageCore._broadcast(storeConfig.events.storeChanged, 'saved', exportData);
+                zStorageCore._broadcast(storeConfig.events.storeChanged, 'saved', exportData);
             }
         }
 
         function importData() {
             var importedData = $window.localStorage.getItem(storageKey);
-            importedData = storageCore.checkStoreImportVersionAndParseData(importedData);
+            importedData = zStorageCore.checkStoreImportVersionAndParseData(importedData);
             var hasData = !!importedData;
             if (hasData) {
                 manager.importEntities(importedData);
             }
             return hasData;
         }
-        
+
         function saveToLocalStorage(key, data) {
-            $window.localStorage.setItem(key, storageCore.formatStorageData(storageCore.storeMeta, data));
+            $window.localStorage.setItem(key, zStorageCore.formatStorageData(zStorageCore.storeMeta, data));
         }
     }
 
     /*
-     * storageWip service
+     * zStorageWip service
      * 
      * API's for saving, loading, finding and clearing breeze
      * breeze work in progress (WIP) from local storage
      */
-    storageModule.factory('storageWip',
-        ['$q', '$rootScope', '$window', 'storageConfig', 'storageCore', storageWip]);
+    storageModule.factory('zStorageWip',
+        ['$q', '$rootScope', '$window', 'zStorageConfig', 'zStorageCore', zStorageWip]);
 
-    function storageWip($q, $rootScope, $window, storageConfig, storageCore) {
-        var storeConfig = storageConfig.config;
+    function zStorageWip($q, $rootScope, $window, zStorageConfig, zStorageCore) {
+        var storeConfig = zStorageConfig.config;
         var manager;
         var wipKey = storeConfig.wipKey;
 
@@ -218,30 +215,30 @@
             wip.forEach(function (item) {
                 $window.localStorage.removeItem(item.key);
             });
-            storageCore._broadcast(storeConfig.events.wipChanged, 'cleared all WIP');
+            zStorageCore._broadcast(storeConfig.events.wipChanged, 'cleared all WIP');
             $window.localStorage.removeItem(wipKey);
         }
 
-        function findWipKeyByEntityId (entityName, id) {
+        function findWipKeyByEntityId(entityName, id) {
             var wip = getWipSummary();
-            var wipItem = wip.filter(function(item) {
+            var wipItem = wip.filter(function (item) {
                 return item.entityName.toLowerCase() === entityName.toLowerCase() && item.id === id;
             })[0];
             return wipItem ? wipItem.key : null;
         }
 
-        function getWipSummary () {
+        function getWipSummary() {
             var wip = [];
             var raw = $window.localStorage.getItem(wipKey);
             if (raw) { wip = JSON.parse(raw); }
             return wip;
         }
 
-        function loadWipEntity (key) {
+        function loadWipEntity(key) {
             return importWipData(key);
         }
 
-        function removeWipEntity (key) {
+        function removeWipEntity(key) {
             if (!key) { return; }
 
             $window.localStorage.removeItem(key);
@@ -252,10 +249,10 @@
             });
             // re-save the wip summary and broadcast the changes
             $window.localStorage.setItem(wipKey, JSON.stringify(updatedWip));
-            storageCore._broadcast(storeConfig.events.wipChanged, 'removed 1 entity', updatedWip);
+            zStorageCore._broadcast(storeConfig.events.wipChanged, 'removed 1 entity', updatedWip);
         }
 
-        function storeWipEntity (entity, key, entityName, description, routeState) {
+        function storeWipEntity(entity, key, entityName, description, routeState) {
             // Entity is the entity to export.
             // key must also be passed. this allows us to save
             // an entity by itself away from the datacontext.
@@ -279,7 +276,7 @@
 
         function importWipData(key) {
             var importedData = $window.localStorage.getItem(key);
-            importedData = storageCore.checkStoreImportVersionAndParseData(importedData);
+            importedData = zStorageCore.checkStoreImportVersionAndParseData(importedData);
             var hasData = !!importedData;
             if (hasData) {
                 var importResults = manager.importEntities(importedData);
@@ -288,14 +285,14 @@
             }
             return null;
         }
-        
+
         function saveToWipLocalStorage(key, data) {
             var meta = { // trimmed
-                breezeVersion: storageCore.storeMeta.breezeVersion,
-                breezeMetadataVersion: storageCore.storeMeta.breezeMetadataVersion,
-                appVersion: storageCore.storeMeta.appVersion
+                breezeVersion: zStorageCore.storeMeta.breezeVersion,
+                breezeMetadataVersion: zStorageCore.storeMeta.breezeMetadataVersion,
+                appVersion: zStorageCore.storeMeta.appVersion
             };
-            $window.localStorage.setItem(key, storageCore.formatStorageData(meta, data));
+            $window.localStorage.setItem(key, zStorageCore.formatStorageData(meta, data));
         }
 
         function storeWipSummary(entity, key, entityName, description, routeState) {
@@ -316,7 +313,7 @@
                 wipSummary.push(wipHeader);
                 $window.localStorage.setItem(wipKey, JSON.stringify(wipSummary));
             }
-            storageCore._broadcast(storeConfig.events.wipChanged, 'saved', wipSummary);
+            zStorageCore._broadcast(storeConfig.events.wipChanged, 'saved', wipSummary);
         }
     }
 })();
