@@ -5,6 +5,10 @@ Save Work in Progress to Local Storage for Angular and Breeze apps
 
 Version 1.0.0
 
+## NuGet
+[Angular.Breeze.StorageWIP](https://www.nuget.org/packages/Angular.Breeze.StorageWIP)
+
+
 ##Setup
     // Add ngzWip to your module dependencies.
     var app = angular.module('app', ['ngzWip']);
