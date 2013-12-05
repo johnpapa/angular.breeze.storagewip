@@ -1,12 +1,17 @@
 angular.breeze.storageWip
 ============
 
-Save Work in Progress to Local Storage for Angular and Breeze apps
+Save Work in Progress to Local Storage for Angular and Breeze apps.
+
+Coming Soon to [Building Apps with Angular and Breeze](http://jpapa.me/spangz) on Pluralsight
+
 
 Version 1.0.0
 
 ## NuGet
-[Angular.Breeze.StorageWIP](https://www.nuget.org/packages/Angular.Breeze.StorageWIP)
+Get [Angular.Breeze.StorageWIP](https://www.nuget.org/packages/Angular.Breeze.StorageWIP) from NuGet
+
+    install-package Angular.Breeze.StorageWIP
 
 
 ##Setup
