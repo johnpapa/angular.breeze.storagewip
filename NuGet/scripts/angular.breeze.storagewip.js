@@ -94,12 +94,12 @@
                     }
                     return data[1];
                 } else {
-                    broadcast(zStorageConfig.events.error,
+                    _broadcast(storeConfig.events.error,
                         'Did not load from storage because mismatched versions',
                         { current: storeMeta, storage: importMeta });
                 }
             } catch (ex) {
-                broadcast(zStorageConfig.events.error, 'Exception during load from storage: ' + ex.message, ex);
+                _broadcast(storeConfig.events.error, 'Exception during load from storage: ' + ex.message, ex);
             }
             return null; // failed
         }
