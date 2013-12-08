@@ -6,6 +6,8 @@
  * Author: John Papa 
  * Project: https://github.com/johnpapa/angular.breeze.storagewip
  *
+ * Version: 1.0.2
+ *
  * Dependencies: HTML5 localStorage, Breeze and Angular.
  *
  * Description:
@@ -70,6 +72,7 @@
             _broadcast: _broadcast,
             checkStoreImportVersionAndParseData: checkStoreImportVersionAndParseData,
             formatStorageData: formatStorageData,
+            clearAllIsLoadedFlags: clearAllIsLoadedFlags,
             storeMeta: storeMeta
         };
 
@@ -102,6 +105,14 @@
                 _broadcast(storeConfig.events.error, 'Exception during load from storage: ' + ex.message, ex);
             }
             return null; // failed
+        }
+        
+        function clearAllIsLoadedFlags() {
+            for (var prop in storeMeta.isLoaded) {
+                if (storeMeta.isLoaded.hasOwnProperty(prop)) {
+                    storeMeta.isLoaded[prop] = false;
+                }
+            }
         }
 
         function formatStorageData(meta, data) {
@@ -145,6 +156,7 @@
 
         function clear() {
             $window.localStorage.clear();
+            zStorageCore.clearAllIsLoadedFlags();
             zStorageCore._broadcast(storeConfig.events.wipChanged, 'cleared all WIP');
             zStorageCore._broadcast(storeConfig.events.storeChanged, 'cleared');
         }
