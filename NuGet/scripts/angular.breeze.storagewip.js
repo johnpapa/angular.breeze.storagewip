@@ -6,7 +6,7 @@
  * Author: John Papa 
  * Project: https://github.com/johnpapa/angular.breeze.storagewip
  *
- * Version: 1.0.2
+ * Version: 1.0.3
  *
  * Dependencies: HTML5 localStorage, Breeze and Angular.
  *
@@ -62,10 +62,7 @@
         var storeMeta = {
             breezeVersion: breeze.version,
             appVersion: storeConfig.version,
-            isLoaded: {
-                sessions: false,
-                attendees: false
-            }
+            isLoaded: {}
         };
 
         var service = {
@@ -91,10 +88,6 @@
                 var importMeta = data[0];
                 if (importMeta.breezeVersion === storeMeta.breezeVersion &&
                     importMeta.appVersion === storeMeta.appVersion) {
-                    if (importMeta.isLoaded) {
-                        storeMeta.isLoaded.sessions = storeMeta.isLoaded.sessions || importMeta.isLoaded.sessions;
-                        storeMeta.isLoaded.attendees = storeMeta.isLoaded.attendees || importMeta.isLoaded.attendees;
-                    }
                     return data[1];
                 } else {
                     _broadcast(storeConfig.events.error,
@@ -187,7 +180,8 @@
         }
 
         function saveToLocalStorage(key, data) {
-            $window.localStorage.setItem(key, zStorageCore.formatStorageData(zStorageCore.storeMeta, data));
+            var stash = zStorageCore.formatStorageData(zStorageCore.storeMeta, data);
+            $window.localStorage.setItem(key, stash);
         }
     }
 
