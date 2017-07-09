@@ -3,7 +3,7 @@ angular.breeze.storageWip
 
 Save Work in Progress to Local Storage for Angular and Breeze apps.
 
-Coming Soon to [Building Apps with Angular and Breeze](http://jpapa.me/spangz) on Pluralsight
+As seen on [Building Apps with Angular and Breeze](http://jpapa.me/spangz) on Pluralsight
 
 
 Version 1.0.0
